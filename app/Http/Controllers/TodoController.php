@@ -11,7 +11,7 @@ class TodoController extends Controller
 {
     public function index()
     {
-        $todos = Todo::where('user_id', auth()->user()->id)
+        $todos = Todo::with('category')->where('user_id', auth()->user()->id)
             ->orderBy('is_complete', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -70,7 +70,7 @@ class TodoController extends Controller
         } else {
             // abort(403);
             // abort(403, 'Not authorized');
-            return redirect()->route('todo.index')->with('danger','You are not authorized to edit this todo!');
+            return redirect()->route('todo.index')->with('danger', 'You are not authorized to edit this todo!');
         }
     }
 
@@ -106,7 +106,7 @@ class TodoController extends Controller
             ]);
             return redirect()->route('todo.index')->with('success', 'Todo completed successfully!');
         } else {
-            return redirect()->route('todo.index')->with('danger','You are not authorized to complete this todo!');
+            return redirect()->route('todo.index')->with('danger', 'You are not authorized to complete this todo!');
         }
     }
     public function uncomplete(Todo $todo)
@@ -118,7 +118,7 @@ class TodoController extends Controller
             ]);
             return redirect()->route('todo.index')->with('success', 'Todo uncompleted successfully!');
         } else {
-            return redirect()->route('todo.index')->with('danger','You are not authorized to uncomplete this todo!');
+            return redirect()->route('todo.index')->with('danger', 'You are not authorized to uncomplete this todo!');
         }
     }
     public function destroy(Todo $todo)
@@ -127,7 +127,7 @@ class TodoController extends Controller
             $todo->delete();
             return redirect()->route('todo.index')->with('success', 'Todo deleted successfully!');
         } else {
-            return redirect()->route('todo.index')->with('danger','You are not authorized to delete this todo!');
+            return redirect()->route('todo.index')->with('danger', 'You are not authorized to delete this todo!');
         }
     }
     public function destroyCompleted()
